@@ -1,4 +1,4 @@
-import llist
+from . import segment
 
 import facto
 
@@ -53,13 +53,14 @@ def next_permutation(perm):
 
 
 def permutation_from_coefficients(reference_list, coefficients):
-    linked_list = llist.dllist(reference_list)
     perm = list()
     for i in range(0, len(reference_list) - len(coefficients) - 1):
-        perm.append(linked_list.remove(linked_list.first))
+        perm.append(reference_list[i])
+    seg = segment.SegmentTree(reference_list[len(reference_list) - len(coefficients) - 1: len(reference_list)])
     for j in coefficients:
-        perm.append(linked_list.remove(linked_list.nodeat(j)))
-    perm.append(linked_list.remove(linked_list.first))
+        perm.append(seg.arr[seg.find_prefix_with_sum(j+1)])
+    while seg.tree[1] != 0:
+        perm.append(seg.arr[seg.find_prefix_with_sum(1)])
     return perm
 
 
